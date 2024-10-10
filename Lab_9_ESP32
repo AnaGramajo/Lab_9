@@ -1,0 +1,43 @@
+// Universidad del Valle
+// Digital 2
+// Ana Gramajo
+// Lee el valor de dos potenciómetros y envía sus valores al núcleo STM32F446RE
+
+// Librerías 
+#include <Arduino.h>
+#include <HardwareSerial.h>
+
+// variables globales
+// Potenciómetros
+#define P1 13
+#define P2 32
+// Pines de UART
+#define TX 17
+#define RX 16
+// Se define el puerto serial a utilizar para la comunicación UART
+HardwareSerial pot(2);
+
+void setup() {
+  // inicia la conexión serial con la comptadora
+  Serial.begin(115200);
+  // Se configura el UART
+  pot.begin(115200, SERIAL_8N1, RX, TX);
+  // Se define el funcionamiento de los potenciómetros
+  pinMode(P1,INPUT); 
+  pinMode(P2,INPUT);
+}
+
+void loop() {
+  // Lee el valor de los potenciómetros
+  int P_1 = map(analogRead(P1), 0, 4096, 0, 16);
+  int P_2 = map(analogRead(P2), 0, 4096, 0, 16);
+  // Muestra los valores en la pantalla serial
+  Serial.print(P_1);
+  Serial.print(",");
+  Serial.println(P_2);
+  // Envía el valor del potenciómetro al núcleo
+  pot.print(P_1);
+  pot.print(",");
+  pot.println(P_2);
+  delay(1000);
+}
